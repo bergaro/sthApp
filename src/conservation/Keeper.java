@@ -37,22 +37,22 @@ public class Keeper {
     public void zipFiles(String outputDir, List<String> playerDirs) {
         String zipDir = outputDir + "saveGames.zip";
         try (ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(zipDir))) {
-            for (String dir : playerDirs) {
-                try (FileInputStream fileInputStream = new FileInputStream(dir)) {
-                    String[] dirComponents = dir.split("\\\\");
-                    String fileName = dirComponents[dirComponents.length - 1];
-                    ZipEntry zipEntry = new ZipEntry("packed_" + fileName);
-                    zipOutputStream.putNextEntry(zipEntry);
-                    byte[] buffer = new byte[fileInputStream.available()];
-                    zipOutputStream.write(buffer);
-                    zipOutputStream.closeEntry();
 
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
+            for (String srcFile : playerDirs) {
+                File fileToZip = new File(srcFile);
+                FileInputStream fis = new FileInputStream(fileToZip);
+                ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+                zipOutputStream.putNextEntry(zipEntry);
+                byte[] bytes = new byte[1024];
+                int length;
+                while((length = fis.read(bytes)) >= 0) {
+                    zipOutputStream.write(bytes, 0, length);
                 }
+                fis.close();
             }
             logging.add("Архив: " + zipDir + " создан.");
-        } catch (IOException ex) {
+
+        } catch (Exception ex) {
             logging.add(ex.getMessage());
         }
     }
