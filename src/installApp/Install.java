@@ -41,7 +41,7 @@ public class Install {
             }
         }
         myFiles.clear();
-        logging.add("Метод createRecDir() отработал успешно.\n");
+        logging.add("Метод createRecDir() отработал успешно.");
     }
     /**
      * <p>
@@ -66,7 +66,7 @@ public class Install {
             }
         }
         myFiles.clear();
-        logging.add("Метод createMainFiles() отработал успешно.\n");
+        logging.add("Метод createMainFiles() отработал успешно.");
     }
     /**
      * <p>
@@ -87,7 +87,7 @@ public class Install {
             }
         }
         myFiles.clear();
-        logging.add("Метод createSrcDir() отработал успешно.\n");
+        logging.add("Метод createSrcDir() отработал успешно.");
     }
     /**
      * <p>
@@ -112,7 +112,7 @@ public class Install {
             }
         }
         myFiles.clear();
-        logging.add("Метод createMainDir() отработал успешно.\n");
+        logging.add("Метод createMainDir() отработал успешно.");
     }
     /**
      * Производит последовательное создание фалов и каталогов

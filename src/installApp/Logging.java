@@ -8,10 +8,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Logging {
-    private static Logging instance;                                 //Поле хранящее экземпляр класса(Синглтон)
+    private static Logging instance;                                //Поле хранящее экземпляр класса(Синглтон)
     private StringBuilder stringBuilder;                            //Поле аккумулирующее события исполнения кода
     private Date date;                                              //Поле для хранения даты/времени событий
     private SimpleDateFormat simpleDateFormat;                      //Поле хранит шаблон для date/time
+    private String logFileDir;                                      //Расположение файла с логами
+
+    public String getLogFileDir() {
+        return logFileDir;
+    }
     /**
      * <p>
      *     Реализация (Синглтон). Если поле instance содержит
@@ -57,7 +62,7 @@ public class Logging {
      */
     public void add(String str) {
         date = new Date();
-        stringBuilder.append(simpleDateFormat.format(date)).append(str);
+        stringBuilder.append(simpleDateFormat.format(date)).append(str).append("\n");
     }
     /**
      * <p>
@@ -79,14 +84,14 @@ public class Logging {
      */
     public void add(File sthFile, int status) {
         if(sthFile.isDirectory() && status > 0) {
-            add("Каталог: " + sthFile.getAbsolutePath() + "\\ создан успешно! \n");
+            add("Каталог: " + sthFile.getAbsolutePath() + "\\ создан успешно!");
         } else if(sthFile.isDirectory() && status < 0) {
-            add("Каталог: " + sthFile.getAbsolutePath() + "\\ уже существует! \n");
+            add("Каталог: " + sthFile.getAbsolutePath() + "\\ уже существует!");
         }
         if(sthFile.isFile() && status > 0) {
-            add("Файл: " + sthFile.getAbsolutePath() + " создан успешно! \n");
+            add("Файл: " + sthFile.getAbsolutePath() + " создан успешно!");
         } else if(sthFile.isFile() && status < 0) {
-            add("Файл: " + sthFile.getAbsolutePath() + " уже существует! \n");
+            add("Файл: " + sthFile.getAbsolutePath() + " уже существует!");
         }
     }
     /**
@@ -96,14 +101,15 @@ public class Logging {
      * @param baseDirectory основной каталог программы
      */
     public void createTempFile(String baseDirectory) {
-        File logFile = new File(baseDirectory + "\\temp\\temp.txt");
+        logFileDir = baseDirectory + "\\temp\\temp.txt";
+        File logFile = new File(logFileDir);
         try {
             if(logFile.createNewFile()) {
                 add(logFile, 1);
             } else {
                 add(logFile, -1);
             }
-            add("Метод createTempFile() отработал успешно.\n");
+            add("Метод createTempFile() отработал успешно.");
         } catch (IOException ex) {
             add(ex.getMessage());
         }
@@ -117,7 +123,7 @@ public class Logging {
      * </p>
      * @param logFile Лог-файл для записи.
      */
-    private void writeLog(File logFile) {
+    public void writeLog(File logFile) {
         try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(logFile))) {
             bufferedWriter.write(stringBuilder.toString());
         } catch (IOException ex) {
